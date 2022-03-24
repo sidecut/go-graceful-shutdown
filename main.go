@@ -15,7 +15,7 @@ import (
 func main() {
 	// Setup
 	e := echo.New()
-	e.Logger.SetLevel(log.INFO)
+	e.Logger.SetLevel(log.DEBUG)
 	e.GET("/", func(c echo.Context) error {
 		time.Sleep(5 * time.Second)
 		return c.JSON(http.StatusOK, "OK")
@@ -25,6 +25,7 @@ func main() {
 		if err != nil {
 			return err
 		}
+		c.Logger().Debugf("Delaying %v seconds", delay)
 		time.Sleep(time.Duration(delay) * time.Second)
 		return c.JSON(http.StatusOK, echo.Map{"a": "b", "c": "d"})
 	})
