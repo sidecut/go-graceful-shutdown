@@ -9,12 +9,14 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
 )
 
 func main() {
 	// Setup
 	e := echo.New()
+	e.Use(middleware.Logger())
 	e.Logger.SetLevel(log.INFO)
 	e.GET("/", func(c echo.Context) error {
 		time.Sleep(5 * time.Second)
