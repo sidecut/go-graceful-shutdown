@@ -44,14 +44,12 @@ func main() {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
 
-	select {
-	case <-ctx.Done():
-		ctxShutdownTimeout, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-		defer cancel()
-		if err := e.Shutdown(ctxShutdownTimeout); err != nil {
-			e.Logger.Fatal(err)
-		}
-		fmt.Println(ctx.Err()) // prints "context canceled"
-		stop()
+	<-ctx.Done()
+	ctxShutdownTimeout, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	if err := e.Shutdown(ctxShutdownTimeout); err != nil {
+		e.Logger.Fatal(err)
 	}
+	fmt.Println(ctx.Err()) // prints "context canceled"
+	stop()
 }
