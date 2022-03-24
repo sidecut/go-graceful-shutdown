@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strconv"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -19,8 +20,12 @@ func main() {
 		time.Sleep(5 * time.Second)
 		return c.JSON(http.StatusOK, "OK")
 	})
-	e.GET("/10", func(c echo.Context) error {
-		time.Sleep(10 * time.Second)
+	e.GET("/delay/:delay", func(c echo.Context) error {
+		delay, err := strconv.Atoi(c.Param("delay"))
+		if err != nil {
+			return err
+		}
+		time.Sleep(time.Duration(delay) * time.Second)
 		return c.JSON(http.StatusOK, echo.Map{"a": "b", "c": "d"})
 	})
 
